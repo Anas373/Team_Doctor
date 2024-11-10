@@ -2,7 +2,7 @@ import Header from  "./Component/Header"
 import Footer  from "./Component/Footer"
 import Homme  from "./Component/Homme" 
 import  Herrosection  from "./Component/Herrosection"
-// import Contact from "./Component/Contactus"
+import Contact from "./Component/Contactus"
 
 function App() {
     return(
@@ -44,7 +44,7 @@ function App() {
      <br/>
      <br/>
      <br/>
-     {/* <Contact/> */}
+     <Contact/>
      <br/>
      <Footer/>
      

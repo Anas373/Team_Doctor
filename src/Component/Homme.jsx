@@ -3,7 +3,7 @@ import logohomme from "../assets/homme.png";
 
 const Homme = () => {
   return (
-    <div className='flex justify-between items-center py-7 px-6'>
+    <div className='flex justify-between items-center py-7 px-6 mt-9'>
       <div className='flex-1 pl-28'>
         <h1 className='text-4xl font-bold mb-6'>
           Find & <span className='text-blue-500'>Book</span> your Fav <span className='text-blue-500'>Doctors</span>
@@ -17,7 +17,7 @@ const Homme = () => {
         </button>
       </div>
       
-     <div  className='pr-16'>
+     <div  className='pr-16'  >
      <img 
         src={logohomme} 
         alt="Homme" 
