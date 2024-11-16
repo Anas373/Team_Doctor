@@ -1,40 +1,55 @@
-import Neurologist from "../assets/Neurologist.svg";
-import Gynecologist from "../assets/Gynecologist.svg";
-import Pediatricians from "../assets/Pediatricians.svg";
-import Gastroenterologist from "../assets/Gastroenterologist.svg";
-import Medcins from "./Medcin";
-
-const SpecialtyCard = ({ icon, label }) => {
-  return (
-    <div className="flex flex-col items-center mb-4">
-      <img src={icon} alt={label} className="w-20 h-20 mb-2 rounded-full" />
-      <span className="text-center font-medium">{label}</span>
-    </div>
-  );
-};
-
-const Medcin = () => {
-  const specialties = [
-    { icon: Gynecologist, label: "Gynecologist" },
-    { icon: Pediatricians, label: "Pediatrician" },
-    { icon: Neurologist, label: "Neurologist" },
-    { icon: Gastroenterologist, label: "Gastroenterologist" },
+import React from 'react';
+import Medcin from "../Component/Medcin";
+import Dent from "../assets/dentiste.png";
+import yeux from "../assets/yeux.png"
+import poumon from "../assets/poumon.png"
+import os from "../assets/os.png"
+import couer from "../assets/couer.jpg"
+const Specialiter = () => {
+  const menuItems = [
+    { label: 'Ophtalmologue', link: '#',icon:yeux },
+    { label: 'Pneumologue', link: '#',icon :poumon },
+    { label: 'Orthopédiste', link: '#',icon: os },
+    { label: 'Cardiologue', link: '#',icon: couer },
+    { label: 'Dentiste', link: '#', icon: Dent },
   ];
 
   return (
-    <div className="flex w-4/5 mx-auto mt-6">
-      {/* Left section for specialties */}
-      <div className="flex flex-col items-center w-1/3 border-r border-gray-300 pr-8 mr-8">
-        <h1 className="text-2xl font-bold mb-8">Specialities</h1>
-        {specialties.map((specialty, index) => (
-          <SpecialtyCard key={index} icon={specialty.icon} label={specialty.label} />
-        ))}
-      </div>
+    <>
+      <div className="flex h-screen">
+        {/* Sidebar */}
+        <div className="w-48 flex-col justify-between border-e bg-white">
+          <div className="px-4 py-6">
+            <ul className="mt-6 space-y-1">
+              {menuItems.map((item, index) => (
+                <li key={index}>
+                  <a
+                    href={item.link}
+                    className="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    {item.icon && (
+                      <img
+                        src={item.icon}
+                        alt={item.label}
+                        className="w-14" // Adjust the size of the icon
+                      />
+                    )}
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
-      {/* Right section for doctor photos or additional content */}
-      <Medcins />
-    </div>
+        {/* Content area (Doctors List) */}
+        <div className="flex-1 p-6">
+          <Medcin />
+        </div>
+        
+      </div>
+    </>
   );
 };
 
-export default Medcin;
+export default Specialiter;

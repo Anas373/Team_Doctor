@@ -1,11 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { doctors } from './infomedcin';
-
 
 const Medcin = () => {
   return (
-    <div className="w-4/5 mx-auto ">
-      <h1 className="text-2xl font-bold mb-6 text-center">Doctors List</h1>
+    <div className="w-4/5 mx-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {doctors.slice(0, 10).map((item, index) => (
           <div 
@@ -20,7 +19,8 @@ const Medcin = () => {
             <p className="text-green-500 font-semibold text-sm mb-2">Available</p>
             <p className="font-bold text-lg text-gray-800">{item.name}</p>
             <p className="text-blue-500 text-sm font-medium">{item.specialization}</p>
-            <p className="text-gray-500 text-xs">{item.experience} years of experience</p>
+            {/* Link to the Reservation page with the doctor's ID */}
+            <Link to={`./Reserver/${item.id}`} className="text-orange-500 text-xs">Reserve</Link>
           </div>
         ))}
       </div>

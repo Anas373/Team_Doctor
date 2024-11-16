@@ -1,7 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import App from "./App"
+import Dashborde from "./Component/Dashborde"
 import Inscription from "./Component/Inscription";
+import Reservation from "./Component/Reserver"
 import {
   createBrowserRouter,
   RouterProvider,
@@ -17,6 +19,15 @@ const router = createBrowserRouter([
     path: "/Inscription",
     element:<Inscription/>,
   },
+  {
+    path: "/Reserver/:id",
+    element:<Reservation/>,
+  },
+  {
+    path: "/Dashborde",
+    element:<Dashborde/>,
+  }
+ 
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

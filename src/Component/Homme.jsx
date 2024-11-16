@@ -1,31 +1,38 @@
 import React from 'react';
-import logohomme from "../assets/homme.png";
+import medcins from "../assets/staf.png"
 
 const Homme = () => {
   return (
-    <div className='flex justify-between items-center py-7 px-6 mt-9'>
-      <div className='flex-1 pl-28'>
-        <h1 className='text-4xl font-bold mb-6'>
-          Find & <span className='text-blue-500'>Book</span> your Fav <span className='text-blue-500'>Doctors</span>
-        </h1>
-        <p className='text-lg'>
-          Lorem ipsum, dolor sit amet consectetur <br />adipisicing elit. Accusamus suscipit eligendi
-          nobis fuga quisquam!
-        </p><br />
-        <button className='bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-300'>
-          Voir Plus
-        </button>
+    <section>
+  <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
+      <div className="relative h-64 overflow-hidden rounded-lg sm:h-80 lg:order-last lg:h-full">
+        <img
+          alt=""
+          src={medcins}
+          className=""
+        />
       </div>
-      
-     <div  className='pr-16'  >
-     <img 
-        src={logohomme} 
-        alt="Homme" 
-        className='w-96   rounded-lg shadow-lg border-4 mr-8'  
-      />
-     </div>
-      
+
+      <div className="lg:py-24">
+        <h2 className="text-3xl font-bold sm:text-4xl">Find An <span className='text-blue-500'>Apointement with your <span>Doctor</span></span></h2>
+
+        <p className="mt-4 text-gray-600">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut qui hic atque tenetur quis
+          eius quos ea neque sunt, accusantium soluta minus veniam tempora deserunt? Molestiae eius
+          quidem quam repellat.
+        </p>
+
+        <a
+          href="#"
+          className="mt-8 inline-block rounded bg-blue-500 px-12 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-yellow-400"
+        >
+          learn more
+        </a>
+      </div>
     </div>
+  </div>
+</section>
   );
 };
 

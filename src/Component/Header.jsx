@@ -1,7 +1,9 @@
+
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
-import { faXmark } from '@fortawesome/free-solid-svg-icons'; // Corrected import
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+
 
 const Header = () => {
     const [model, setModel] = useState(false);
@@ -9,17 +11,12 @@ const Header = () => {
     const toggleModel = () => {
       setModel(!model);
     };
-  
-    // const handleLoginClick = (e) => {
-    //   e.preventDefault();
-    //   toggleModel();
-    // };
 
     const Menu = [
         { id: 1, name: "Home" },
-        { id: 2, name: "Spécialité" },
+        { id: 2, name: "Spécialité"}, 
         { id: 3, name: "Réservation" },
-        { id: 4, name: "Contact Us" }
+        { id: 4, name: "Contact Us"  }
     ];
 
     return (
@@ -33,11 +30,10 @@ const Header = () => {
                 <nav className="flex-1 flex justify-center">
                     <ul className="flex gap-10">
                         {Menu.map((item) => (
-                            <li 
-                                key={item.id} 
-                                className="hover:text-blue-500 cursor-pointer transition-colors duration-200"
-                            >
-                                {item.name}
+                            <li key={item.id} className="hover:text-blue-500 cursor-pointer transition-colors duration-200">
+                                <a > 
+                                    {item.name}
+                                </a>
                             </li>
                         ))}
                     </ul>
@@ -53,7 +49,6 @@ const Header = () => {
 
             {model && (
                 <div className="fixed top-4 right-4 max-w-[250px] bg-white p-4 rounded-lg shadow-lg z-50">
-                    {/* Close button */}
                     <button
                         onClick={toggleModel}
                         className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none"
