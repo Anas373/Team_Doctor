@@ -1,91 +1,118 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { doctors } from './infomedcin'; // Ensure the import is correct
 
-const Sidebar = () => {
-  const [appointments, setAppointments] = useState([
-    { patientName: 'John Doe', time: '10:00 AM' },
-    { patientName: 'Jane Doe', time: '11:00 AM' },
-    { patientName: 'Bob Smith', time: '12:00 PM' },
-  ]);
+const Reservation = () => {
+  const { id } = useParams(); // Access the dynamic 'id' parameter from the URL
+  const navigate = useNavigate(); // Initialize navigate
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
 
-  const [notifications, setNotifications] = useState(5);
+  // Fetch the selected doctor based on the id parameter
+  useEffect(() => {
+    const doctor = doctors.find((doc) => doc.id === parseInt(id)); // Find the doctor by id
+    setSelectedDoctor(doctor);
+  }, [id]);
+
+  // If doctor is not found, show an error message
+  if (!selectedDoctor) {
+    return <div className="text-center text-red-500">Doctor not found</div>;
+  }
+
+  const handleAccept = () => {
+    navigate('/Dashborde'); // Navigate to Dashborde
+  };
 
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <div className="bg-blue-500 w-64 p-4 text-white">
-        {/* Profile Section */}
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center">
-            <div
-              className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16"
-              aria-label="Profile Picture"
-              role="img"
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white">
+      <main className="container mx-auto px-4 py-12">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Section d'information sur le médecin */}
+          <div>
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">
+              Doctor: <span className="text-blue-600">{selectedDoctor.name}</span>
+            </h2>
+            <p className="text-xl text-gray-600 mb-6">
+              Easy, fast, and convenient scheduling for your health needs.
+            </p>
+            <img
+              src={selectedDoctor.image}
+              alt={selectedDoctor.name}
+              width={600}
+              height={400}
+              className="rounded-lg shadow-md"
             />
-            <div className="ml-4">
-              <h2 className="text-lg font-bold">Dr. Jane Smith</h2>
-              <p className="text-sm">Doctor</p>
-            </div>
           </div>
-          {/* Notifications Icon */}
-          <div className="flex items-center relative">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-labelledby="bell-icon-title"
-            >
-              <title id="bell-icon-title">Notifications</title>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
-            </svg>
-            <span className="ml-2">{notifications}</span>
+
+          {/* Section de réservation */}
+          <div className="w-full max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4">Make a Reservation</h3>
+            <form className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                  Patient Name
+                </label>
+                <input
+                  id="name"
+                  placeholder="Enter your full name"
+                  required
+                  className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+                  Date
+                </label>
+                <div className="flex">
+                  <input
+                    id="date"
+                    type="date"
+                    required
+                    className="flex-1 px-3 py-2 border rounded-l-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                  />
+                  <button
+                    type="button"
+                    className="px-3 py-2 bg-gray-100 border border-l-0 rounded-r-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300"
+                  >
+                    <span className="sr-only">Select Date</span>
+                    📅
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="time" className="block text-sm font-medium text-gray-700">
+                  Time
+                </label>
+                <input
+                  id="time"
+                  type="time"
+                  required
+                  className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                />
+              </div>
+
+              {/* Buttons */}
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  onClick={handleAccept} // Call handleAccept on click
+                  className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+                >
+                  Accept
+                </button>
+                <button
+                  type="button"
+                  className="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-        {/* Sidebar Links */}
-        <ul>
-          <li className="mb-4">
-            <a
-              href="javascript:void(0);"
-              className="block py-2 px-4 hover:bg-blue-700 rounded"
-            >
-              Settings
-            </a>
-          </li>
-          <li className="mb-4">
-            <a
-              href="javascript:void(0);"
-              className="block py-2 px-4 hover:bg-blue-700 rounded"
-            >
-              Notifications
-            </a>
-          </li>
-        </ul>
-      </div>
-      {/* Main Content */}
-      <div className="flex-1 p-4">
-        <h2 className="text-lg font-bold mb-4">Appointments</h2>
-        <ul>
-          {appointments.map((appointment, index) => (
-            <li
-              key={index}
-              className="bg-white shadow-md rounded p-4 mb-4"
-            >
-              <h3 className="text-lg font-bold">
-                {appointment.patientName}
-              </h3>
-              <p className="text-sm">{appointment.time}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
+      </main>
     </div>
   );
 };
 
-export default Sidebar;
+export default Reservation;
+
