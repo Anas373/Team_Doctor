@@ -22,8 +22,8 @@ const Header = () => {
         e.preventDefault();
 
         const endpoint = isLoginMode
-            ? 'http://localhost/api/login'
-            : 'http://localhost/api/register';
+            ? 'http://localhost:8000/api/login'
+            : 'http://localhost:8000/api/register';
 
         try {
             const response = await axios.post(endpoint, { email, password });
