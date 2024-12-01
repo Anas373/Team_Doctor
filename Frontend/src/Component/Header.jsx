@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const [model, setModel] = useState(false);
@@ -11,11 +12,13 @@ const Header = () => {
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
 
+    const navigate = useNavigate(); // Hook pour naviguer
+
     const toggleModel = () => setModel(!model);
 
     const toggleMode = () => {
         setIsLoginMode(!isLoginMode);
-        setMessage(''); // Reset message on mode switch
+        setMessage(''); // Réinitialiser le message en changeant de mode
     };
 
     const handleSubmit = async (e) => {
@@ -34,6 +37,10 @@ const Header = () => {
                 "Une erreur s'est produite, veuillez réessayer."
             );
         }
+    };
+
+    const handleForgotPassword = () => {
+        navigate('./ResetPassword'); // Redirection vers la page "Forgot Password"
     };
 
     const Menu = [
@@ -118,6 +125,13 @@ const Header = () => {
                             >
                                 {isLoginMode ? 'Sign in' : 'Register'}
                             </button>
+
+                            <p
+                                onClick={handleForgotPassword}
+                                className="text-indigo-600 hover:text-indigo-500 font-semibold cursor-pointer"
+                            >
+                                Forgot Password?
+                            </p>
                         </form>
 
                         <p className="mt-4 text-center text-xs text-gray-500">
@@ -149,4 +163,4 @@ const Header = () => {
     );
 };
 
-export default Header;  
+export default Header;
