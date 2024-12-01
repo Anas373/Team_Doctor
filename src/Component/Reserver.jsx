@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Import Link from rea
-ct-router-dom
 import { doctors } from './infomedcin'; // Ensure the import is correct
 import { FaPhoneAlt } from 'react-icons/fa'; // Importing phone icon from react-icons
 

@@ -9,7 +9,7 @@ import doc7 from "../assets/doc14.png";
 import doc8 from "../assets/doc15.png";
 
 
-import doc02 from "../assets/02.avif"
+/*import doc02 from "../assets/02.avif"
 import doc03 from "../assets/03.avif"
 import doc04 from "../assets/04.avif"
 import doc05 from "../assets/05.avif"
@@ -20,7 +20,7 @@ import doc09 from "../assets/11.avif"
 import doc10 from "../assets/12.avif"
 import doc11 from "../assets/13.avif"
 import doc12 from "../assets/14.avif"
-import doc13 from "../assets/10avif.avif"
+import doc13 from "../assets/10avif.avif"*/
 
 
 
@@ -101,7 +101,7 @@ export const doctors = [
         image: doc8,
     },
 
-   
+   /*
     {
         id: 9,
         name: 'Dr. Farid badri',
@@ -209,7 +209,7 @@ export const doctors = [
         telephone:'+212 524 30 49 62 ',
         localisation:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3395.8992901119036!2d-8.03204752572483!3d31.663974940035402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafed6e39bbf3d3%3A0x65d7bf4229c6b139!2sZakaria%20AMAKHCHOUNE!5e0!3m2!1sen!2sma!4v1733013005275!5m2!1sen!2sma',
         image: doc13,
-    },
+    },*/
 
     
 ]
