@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
+import { useParams } from 'react-router-dom'; // Import useParams for dynamic routing
 import { doctors } from './infomedcin'; // Ensure the import is correct
 
 const Reservation = () => {
   const { id } = useParams(); // Access the dynamic 'id' parameter from the URL
-  const navigate = useNavigate(); // Initialize navigate
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [rating, setRating] = useState(0); // State to track the rating
-
+  const [selectedRequestType, setSelectedRequestType] = useState('visit'); // Valeur par défaut
   // Fetch the selected doctor based on the id parameter
   useEffect(() => {
     const doctor = doctors.find((doc) => doc.id === parseInt(id)); // Find the doctor by id
@@ -18,17 +16,6 @@ const Reservation = () => {
   if (!selectedDoctor) {
     return <div className="text-center text-red-500">Doctor not found</div>;
   }
-
-  // Redirect to the sidebar or dashboard (where further actions can happen)
-  const handleAccept = () => {
-    // Navigate to the doctor's dashboard or any page after making a reservation
-    navigate(`/Dashborde/${selectedDoctor.id}`);
-  };
-
-  // Handle rating change
-  const handleRating = (newRating) => {
-    setRating(newRating);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white">
@@ -54,7 +41,7 @@ const Reservation = () => {
           {/* Section de réservation */}
           <div className="w-full max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Make a Reservation</h3>
-            <form className="space-y-4">
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                   Patient Name
@@ -66,6 +53,22 @@ const Reservation = () => {
                   className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                 />
               </div>
+
+
+
+              <div>
+                  <label htmlFor="requestType" className="block text-sm font-medium text-gray-700">Type de demande</label><br/>
+                  <select id="requestType"  className="flex-1 px-3 py-2 border rounded-l-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"  name="requestType" value={selectedRequestType} onChange={(e) => setSelectedRequestType(e.target.value)}>
+                  <option value="visit">Visite</option>
+                  <option value="consultation">Consultation</option>
+                  <option value="waitingList">Liste d'attente</option>
+                 </select>
+                </div>
+                    
+                   
+
+
+
               <div className="space-y-2">
                 <label htmlFor="date" className="block text-sm font-medium text-gray-700">
                   Date
@@ -98,58 +101,20 @@ const Reservation = () => {
                 />
               </div>
 
-              {/* Star Rating Section */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Rating</label>
-                <div className="flex space-x-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg
-                      key={star}
-                      onClick={() => handleRating(star)}
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill={star <= rating ? 'yellow' : 'gray'}
-                      viewBox="0 0 20 20"
-                      width="24"
-                      height="24"
-                      className="cursor-pointer"
-                    >
-                      <path
-                        d="M10 15.27L16.18 19l-1.64-7.03L19 8.24l-7.19-.61L10 2 8.19 7.63 1 8.24l5.46 3.73L3.82 19z"
-                      />
-                    </svg>
-                  ))}
-                </div>
-              </div>
-
               {/* Buttons */}
               <div className="flex space-x-4">
-                {/* Accept Button - Redirect to the dashboard */}
                 <button
-                  type="button"
-                  onClick={handleAccept} // Navigate to the sidebar or dashboard
+                  type="submit"
                   className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
                 >
                   Accept
                 </button>
-
-                {/* Cancel Button */}
-              {/* Cancel Button */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const confirmCancel = window.confirm(
-                          "Are you sure you want to cancel the reservation?"
-                        );
-                        if (confirmCancel) {
-                          alert("You have canceled the reservation.");
-                          navigate("/"); // Redirect to home or another page if needed
-                        }
-                      }}
-                      className="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300"
-                    >
-                      Cancel
-                    </button>
-
+                <a href='./Dashborde'
+                  type="submit"
+                  className="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300"
+                >
+                  Cancel
+                </a>
               </div>
             </form>
           </div>
