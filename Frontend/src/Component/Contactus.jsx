@@ -1,6 +1,6 @@
 import React from "react";
 
-const Contact = () => {
+const ContactUs = () => {
   return (
     <>
      <h2 className=" text-4xl font-bold text-center">Contact <span className="text-blue-500">Us</span></h2>
@@ -51,4 +51,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactUs;
