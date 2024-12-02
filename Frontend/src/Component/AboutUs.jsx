@@ -39,7 +39,7 @@ const AboutUs = () => {
         <div className="mt-6">
           {[
             {
-              title: "Best interest rates on the market",
+              title: "est interest rates on the market",
               content:
                 "Exercitation in fugiat est ut ad ea cupidatat ut in cupidatat occaecat ut occaecat consequat est minim minim esse tempor laborum consequat esse adipisicing eu reprehenderit enim.",
             },
