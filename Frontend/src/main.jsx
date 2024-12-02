@@ -6,7 +6,6 @@ import Inscription from "./Component/Inscription";
 import Reservation from "./Component/Reserver"
 import Medcin from "./Component/Medcin"
 import Forgetpass from "./Component/Forgetpass"
-import ResetPassword from "./Component/Resetpass";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -34,12 +33,7 @@ const router = createBrowserRouter([
   path: "Forgetpass",
   element:<Forgetpass/>,
  },
-    
 
- {
-  path: "ResetPassword",
-  element:<ResetPassword/>,
- },
   {
     path: "/Dashborde/:id",
     element:<Dashborde/>,

@@ -9,38 +9,68 @@ const Header = () => {
     const [model, setModel] = useState(false);
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [email, setEmail] = useState('');
+    const [name, setName] = useState(''); // Added name state
     const [password, setPassword] = useState('');
+    const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    const [userType, setUserType] = useState('regular'); // User type state
     const [message, setMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const navigate = useNavigate(); // Hook pour naviguer
+    const navigate = useNavigate();
 
     const toggleModel = () => setModel(!model);
 
     const toggleMode = () => {
         setIsLoginMode(!isLoginMode);
-        setMessage(''); // Réinitialiser le message en changeant de mode
+        setMessage(''); // Reset message when switching mode
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+
+        // Check if passwords match during registration
+        if (!isLoginMode && password !== passwordConfirmation) {
+            setMessage('Les mots de passe ne correspondent pas.');
+            setIsLoading(false);
+            return;
+        }
+
+        // Check if user type is selected
+        if (!userType) {
+            setMessage('Please select a user type.');
+            setIsLoading(false);
+            return;
+        }
 
         const endpoint = isLoginMode
             ? 'http://localhost:8000/api/login'
             : 'http://localhost:8000/api/register';
 
         try {
-            const response = await axios.post(endpoint, { email, password });
+            const response = await axios.post(endpoint, {
+                email,
+                name,
+                password,
+                password_confirmation: passwordConfirmation,
+                role: userType, // Send user type along with other fields
+            });
             setMessage(response.data.message);
+            if (response.data.success) {
+                navigate('/dashboard');
+            }
         } catch (error) {
             setMessage(
                 error.response?.data?.message ||
                 "Une erreur s'est produite, veuillez réessayer."
             );
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleForgotPassword = () => {
-        navigate('./ResetPassword'); // Redirection vers la page "Forgot Password"
+        navigate('./Forgetpass');
     };
 
     const Menu = [
@@ -54,7 +84,7 @@ const Header = () => {
         <header className="w-full bg-white shadow-md py-4">
             <div className="container mx-auto flex justify-between items-center px-6">
                 <h1 className="text-2xl font-semibold">
-                    Medicle <span className='font-bold text-blue-500'>Team</span>
+                    Medicle <span className="font-bold text-blue-500">Team</span>
                 </h1>
 
                 <nav className="flex-1 flex justify-center">
@@ -93,6 +123,20 @@ const Header = () => {
 
                     <div className="mt-4">
                         <form className="space-y-4" onSubmit={handleSubmit}>
+                            {!isLoginMode && (
+                                <div>
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-900">Full Name</label>
+                                    <input
+                                        id="name"
+                                        name="name"
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                        className="block w-full rounded-md border-gray-300 py-1 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-indigo-600"
+                                    />
+                                </div>
+                            )}
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-900">Email address</label>
                                 <input
@@ -119,11 +163,45 @@ const Header = () => {
                                 />
                             </div>
 
+                            {!isLoginMode && (
+                                <div>
+                                    <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-900">Confirm Password</label>
+                                    <input
+                                        id="password_confirmation"
+                                        name="password_confirmation"
+                                        type="password"
+                                        value={passwordConfirmation}
+                                        onChange={(e) => setPasswordConfirmation(e.target.value)}
+                                        required
+                                        className="block w-full rounded-md border-gray-300 py-1 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-indigo-600"
+                                    />
+                                </div>
+                            )}
+
+                            {!isLoginMode && (
+                                <div>
+                                    <label htmlFor="user_type" className="block text-sm font-medium text-gray-900">User Type</label>
+                                    <select
+                                            id="user_type"
+                                            name="user_type"
+                                            value={userType}
+                                            onChange={(e) => setUserType(e.target.value)}
+                                            required
+                                            className="block w-full rounded-md border-gray-300 py-1 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-indigo-600"
+                                        >
+                                            <option value="patient">Regular User</option> {/* Change 'regular' to 'patient' */}
+                                            <option value="doctor">Doctor</option>
+                                        </select>
+
+                                </div>
+                            )}
+
                             <button
                                 type="submit"
+                                disabled={isLoading}
                                 className="w-full rounded-md bg-indigo-600 px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
                             >
-                                {isLoginMode ? 'Sign in' : 'Register'}
+                                {isLoading ? 'Loading...' : isLoginMode ? 'Sign in' : 'Register'}
                             </button>
 
                             <p
