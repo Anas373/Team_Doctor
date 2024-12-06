@@ -1,13 +1,14 @@
 <?php
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Patient extends Model
 {
-    use HasFactory;
+    protected $fillable = ['user_id']; // Ensure user_id is fillable
 
-    // Define the fillable fields
-    protected $fillable = ['email', 'name', 'password'];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
