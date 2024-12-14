@@ -50,13 +50,20 @@ class LoginController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout(Request $request)
-    {
-        // Revoke the token that was used to authenticate the current request
-        $request->user()->currentAccessToken()->delete();
+   
 
-        return response()->json([
-            'message' => 'Logged out successfully.',
-        ]);
-    }
+
+
+
+     public function logout(Request $request)
+     {
+         // Supprime la session de l'utilisateur
+         $request->session()->invalidate();
+ 
+         // Régénère le jeton CSRF pour la sécurité
+         $request->session()->regenerateToken();
+ 
+         // Retourne une réponse indiquant la déconnexion réussie
+         return response()->json(['success' => true, 'message' => 'Déconnexion réussie']);
+     }
 }

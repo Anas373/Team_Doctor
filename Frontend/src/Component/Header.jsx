@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-regular-svg-icons';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const [model, setModel] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false); // State to toggle the menu
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [email, setEmail] = useState('');
-    const [name, setName] = useState(''); // Added name state
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
-    const [userType, setUserType] = useState('regular'); // User type state
+    const [userType, setUserType] = useState('regular');
     const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -22,21 +22,19 @@ const Header = () => {
 
     const toggleMode = () => {
         setIsLoginMode(!isLoginMode);
-        setMessage(''); // Reset message when switching mode
+        setMessage('');
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Check if passwords match during registration
         if (!isLoginMode && password !== passwordConfirmation) {
             setMessage('Les mots de passe ne correspondent pas.');
             setIsLoading(false);
             return;
         }
 
-        // Check if user type is selected
         if (!userType) {
             setMessage('Please select a user type.');
             setIsLoading(false);
@@ -53,7 +51,7 @@ const Header = () => {
                 name,
                 password,
                 password_confirmation: passwordConfirmation,
-                role: userType, // Send user type along with other fields
+                role: userType,
             });
             setMessage(response.data.message);
             if (response.data.success) {
@@ -69,6 +67,43 @@ const Header = () => {
         }
     };
 
+   
+
+
+
+
+
+
+
+
+
+
+
+    const handleLogout = async () => {
+        try {
+            const response = await axios.post('http://localhost:8000/api/logout', {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+    
+            if (response.data.success) {
+                localStorage.removeItem('token');
+                navigate('/login');
+            } else {
+                console.error(response.data.message);
+                // Optionally handle the failure here
+            }
+        } catch (error) {
+            if (error.response?.status === 401) {
+                console.error('Session expired or token invalid');
+                localStorage.removeItem('token');
+            } else {
+                console.error('Logout error:', error);
+            }
+        }
+    };
+    
     const handleForgotPassword = () => {
         navigate('./Forgetpass');
     };
@@ -87,24 +122,60 @@ const Header = () => {
                     Medicle <span className="font-bold text-blue-500">Team</span>
                 </h1>
 
-                <nav className="flex-1 flex justify-center">
-                    <ul className="flex gap-10">
-                        {Menu.map((item) => (
-                            <li key={item.id} className="hover:text-blue-500 cursor-pointer transition-colors duration-200">
-                                <a>{item.name}</a>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
+                {/* Responsive Nav (Desktop) */}
+                <div className="md:flex md:items-center md:gap-10 hidden">
+                    <nav className="flex-1 flex justify-center">
+                        <ul className="flex gap-10">
+                            {Menu.map((item) => (
+                                <li key={item.id} className="hover:text-blue-500 cursor-pointer transition-colors duration-200">
+                                    <a>{item.name}</a>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
 
-                <button
-                    type="button"
-                    onClick={toggleModel}
-                    className="flex items-center gap-2 px-4 py-2 border border-blue-500 rounded hover:bg-blue-500 hover:text-white transition-colors duration-200"
-                >
-                    <FontAwesomeIcon icon={faUser} /> Login
-                </button>
+                <div className="flex items-center gap-4">
+                    <button
+                        type="button"
+                        onClick={toggleModel}
+                        className="flex items-center gap-2 px-4 py-2 border border-blue-500 rounded hover:bg-blue-500 hover:text-white transition-colors duration-200"
+                    >
+                        <FontAwesomeIcon icon={faUser} /> Login
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-200"
+                    >
+                        Log Out
+                    </button>
+
+                    {/* Hamburger menu button for mobile view */}
+                    <button
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        className="md:hidden text-black"
+                    >
+                        <FontAwesomeIcon icon={faBars} />
+                    </button>
+                </div>
             </div>
+
+            {/* Mobile Menu */}
+            {menuOpen && (
+                <div className="md:hidden bg-white shadow-md p-4">
+                    <nav>
+                        <ul className="flex flex-col gap-4">
+                            {Menu.map((item) => (
+                                <li key={item.id} className="hover:text-blue-500 cursor-pointer transition-colors duration-200">
+                                    <a>{item.name}</a>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
+            )}
 
             {model && (
                 <div className="fixed top-4 right-4 max-w-[300px] bg-white p-4 rounded-lg shadow-lg z-50">
@@ -182,17 +253,16 @@ const Header = () => {
                                 <div>
                                     <label htmlFor="user_type" className="block text-sm font-medium text-gray-900">User Type</label>
                                     <select
-                                            id="user_type"
-                                            name="user_type"
-                                            value={userType}
-                                            onChange={(e) => setUserType(e.target.value)}
-                                            required
-                                            className="block w-full rounded-md border-gray-300 py-1 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-indigo-600"
-                                        >
-                                            <option value="patient">Regular User</option> {/* Change 'regular' to 'patient' */}
-                                            <option value="doctor">Doctor</option>
-                                        </select>
-
+                                        id="user_type"
+                                        name="user_type"
+                                        value={userType}
+                                        onChange={(e) => setUserType(e.target.value)}
+                                        required
+                                        className="block w-full rounded-md border-gray-300 py-1 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-indigo-600"
+                                    >
+                                        <option value="patient">Regular User</option>
+                                        <option value="doctor">Doctor</option>
+                                    </select>
                                 </div>
                             )}
 

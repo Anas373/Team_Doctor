@@ -9,63 +9,151 @@ const Footer = () => {
 
     const handleModalToggle = () => {
         setShowModal(!showModal);
-        setSubmitted(false); // Reset submission state when modal is opened
+        setSubmitted(false);
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setSubmitted(true); // Set submission state to true
+        const bugDescription = event.target.elements.bugDescription.value;
+
+        // Prepare the payload
+        const payload = {
+            bugDescription,
+            contactEmail: "ichanas867@gmail.com", // Votre email fixe
+        };
+
+        // Send the form to Formspree
+        fetch("https://formspree.io/f/abcd1234", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    setSubmitted(true); // Affiche le message de succès
+                } else {
+                    alert("Something went wrong. Please try again.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("Network error. Please try again later.");
+            });
     };
 
     const handleCancel = () => {
-        setShowModal(false); // Close the modal without submitting the form
+        setShowModal(false);
     };
 
     return (
-        <footer style={{ backgroundColor: '#007BFF', color: 'white', padding: '20px', marginTop: '20px' }}>
-            <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Report a Bug in Our Website</h1>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 20px' }}>
+        <footer id = 'Contact Us' style={{ 
+            backgroundColor: '#2f6690', 
+            color: 'white', 
+            padding: '40px 20px', 
+            marginTop: '20px',
+            fontFamily: "'Arial', sans-serif"
+        }}>
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                padding: '0 20px',
+                maxWidth: '1200px',
+                margin: '0 auto'
+            }}>
                 {/* Quick Links */}
-                <div style={{ flex: 1 }}>
-                    <h2 style={{ fontSize: '18px', fontWeight: 'bold' }}>Quick Links</h2>
+                <div style={{ flex: 1, marginRight: '20px' }}>
+                    <h2 style={{ 
+                        fontSize: '20px', 
+                        fontWeight: '700', 
+                        marginBottom: '15px',
+                        letterSpacing: '0.5px'
+                    }}>Quick Links</h2>
                     <ul style={{ listStyleType: 'none', padding: 0 }}>
-                        <li><a href="#" style={{ color: 'white', textDecoration: 'none' }}>Home</a></li>
-                        <li><a href="#" style={{ color: 'white', textDecoration: 'none' }}>Spécialité</a></li>
-                        <li><a href="#" style={{ color: 'white', textDecoration: 'none' }}>Réservation</a></li>
-                        <li><a href="#" onClick={handleModalToggle} style={{ color: 'white', textDecoration: 'none' }}>Contact Us</a></li>
+                        {["Home", "Spécialité", "Réservation", "Contact Us"].map((link) => (
+                            <li key={link} style={{ marginBottom: '10px' }}>
+                                <a 
+                                    href="#" 
+                                    style={{ 
+                                        color: 'white', 
+                                        textDecoration: 'none',
+                                        transition: 'opacity 0.3s ease',
+                                        opacity: 0.9
+                                    }}
+                                    onMouseOver={(e) => e.target.style.opacity = '1'}
+                                    onMouseOut={(e) => e.target.style.opacity = '0.9'}
+                                    onClick={link === 'Contact Us' ? handleModalToggle : undefined}
+                                >
+                                    {link}
+                                </a>
+                            </li>
+                        ))}
                     </ul>
                 </div>
 
                 {/* Contact Information */}
-                <div style={{ flex: 1 }}>
-                    <h2 style={{ fontSize: '18px', fontWeight: 'bold', cursor: 'pointer' }} onClick={handleModalToggle}>Contact Us</h2>
-                    <p><FontAwesomeIcon icon={faPhone} /> +1 234 567 890</p>
-                    <p><FontAwesomeIcon icon={faEnvelope} /> support@medicleteam.com</p>
-                    <p>123 Medical St., Health City, Country</p>
+                <div style={{ flex: 1, marginRight: '20px' }}>
+                    <h2 
+                        style={{ 
+                            fontSize: '20px', 
+                            fontWeight: '700', 
+                            marginBottom: '15px',
+                            letterSpacing: '0.5px',
+                            cursor: 'pointer'
+                        }} 
+                        onClick={handleModalToggle}
+                    >
+                        Contact Us
+                    </h2>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <p><FontAwesomeIcon icon={faPhone} style={{ marginRight: '10px' }} /> +1 234 567 890</p>
+                        <p><FontAwesomeIcon icon={faEnvelope} style={{ marginRight: '10px' }} /> support@medicleteam.com</p>
+                        <p>123 Medical St., Health City, Country</p>
+                    </div>
                 </div>
 
                 {/* Social Media */}
                 <div style={{ flex: 1 }}>
-                    <h2 style={{ fontSize: '18px', fontWeight: 'bold' }}>Follow Us</h2>
-                    <div>
-                        <a href="#" style={{ color: 'white', marginRight: '10px' }}>
-                            <FontAwesomeIcon icon={faFacebook} />
-                        </a>
-                        <a href="#" style={{ color: 'white', marginRight: '10px' }}>
-                            <FontAwesomeIcon icon={faTwitter} />
-                        </a>
-                        <a href="#" style={{ color: 'white' }}>
-                            <FontAwesomeIcon icon={faInstagram} />
-                        </a>
+                    <h2 style={{ 
+                        fontSize: '20px', 
+                        fontWeight: '700', 
+                        marginBottom: '15px',
+                        letterSpacing: '0.5px'
+                    }}>Follow Us</h2>
+                    <div style={{ display: 'flex', gap: '15px' }}>
+                        {[faFacebook, faTwitter, faInstagram].map((icon, index) => (
+                            <a 
+                                key={index} 
+                                href="#" 
+                                style={{ 
+                                    color: 'white', 
+                                    fontSize: '24px',
+                                    transition: 'transform 0.3s ease',
+                                    display: 'inline-block'
+                                }}
+                                onMouseOver={(e) => e.target.style.transform = 'scale(1.2)'}
+                                onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+                            >
+                                <FontAwesomeIcon icon={icon} />
+                            </a>
+                        ))}
                     </div>
                 </div>
             </div>
 
-            <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '12px' }}>
+            <div style={{ 
+                textAlign: 'center', 
+                marginTop: '30px', 
+                fontSize: '14px',
+                opacity: 0.7,
+                borderTop: '1px solid rgba(255,255,255,0.2)',
+                paddingTop: '20px'
+            }}>
                 &copy; {new Date().getFullYear()} Medicle Team. All rights reserved.
             </div>
 
-            {/* Custom Modal for Reporting a Bug */}
+            {/* Modal for Reporting a Bug */}
             {showModal && !submitted && (
                 <div style={{
                     position: 'fixed',
@@ -73,93 +161,114 @@ const Footer = () => {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    backgroundColor: 'rgba(0, 119, 182, 0.8)',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     zIndex: 1000
                 }}>
                     <div style={{
-                        backgroundColor: 'white',
-                        padding: '20px',
-                        borderRadius: '5px',
+                        backgroundColor: '#ffffff',
+                        padding: '30px',
+                        borderRadius: '8px',
                         width: '400px',
-                        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+                        position: 'relative'
                     }}>
-                        <h1 style={{ margin: '0 0 10px', color: 'black', fontWeight: 'bold' }}>Report a Bug in Our Website</h1>
+                        <h1 style={{
+                            margin: '0 0 20px',
+                            color: '#333',
+                            fontWeight: '600',
+                            textAlign: 'center'
+                        }}>
+                            Report a Bug
+                        </h1>
                         <button onClick={handleModalToggle} style={{
                             background: 'none',
                             border: 'none',
-                            fontSize: '20px',
+                            fontSize: '24px',
                             position: 'absolute',
-                            right: '10px',
-                            top: '10px',
-                            cursor: 'pointer'
+                            right: '15px',
+                            top: '15px',
+                            cursor: 'pointer',
+                            color: 'red'
                         }}>×</button>
                         <form onSubmit={handleSubmit}>
-                            <div style={{ marginBottom: '10px' }}>
-                                <label htmlFor="bugDescription">Bug Description</label>
+                            <div style={{ marginBottom: '15px' }}>
+                                <label htmlFor="bugDescription" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Bug Description :</label>
                                 <textarea
                                     id="bugDescription"
                                     rows="4"
                                     style={{
                                         width: '100%',
-                                        padding: '8px',
+                                        padding: '10px',
                                         borderRadius: '4px',
                                         border: '1px solid #ccc',
-                                        color: 'black',
+                                        color: '#333',
+                                        fontSize: '14px',
+                                        resize: 'none'
                                     }}
                                     placeholder="Describe the bug..."
                                     required
                                 />
                             </div>
-                            <div style={{ marginBottom: '10px' }}>
-                                <label htmlFor="contactEmail">Your Email</label>
+
+                            <div style={{ marginBottom: '20px' }}>
+                                <label htmlFor="contactEmail" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Your Email :</label>
                                 <input
                                     type="email"
                                     id="contactEmail"
-                                    value="aminocx333f@gmail.com" // Auto-filled email
+                                    value="ichanas86@gmail.com"
                                     style={{
                                         width: '100%',
-                                        padding: '8px',
+                                        padding: '10px',
                                         borderRadius: '4px',
                                         border: '1px solid #ccc',
-                                        color: 'black',
+                                        color: '#333',
+                                        fontSize: '14px',
                                     }}
-                                    readOnly // Makes the field read-only to prevent editing
+                                    readOnly
                                 />
                             </div>
 
-                            <button
-                                type="submit"
-                                style={{
-                                    backgroundColor: '#007BFF',
-                                    color: 'white',
-                                    padding: '10px 15px',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                    marginRight: '10px'  // Space between buttons
-                                }}
-                            >
-                                Submit Bug Report
-                            </button>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <button
+                                    type="submit"
+                                    style={{
+                                        backgroundColor: '#007BFF',
+                                        color: 'white',
+                                        padding: '10px 15px',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        fontSize: '16px',
+                                        transition: 'background-color 0.3s'
+                                    }}
+                                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0056b3'}
+                                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#007BFF'}
+                                >
+                                    Submit Bug Report
+                                </button>
 
-                            {/* Cancel Button */}
-                            <button
-                                type="button" // Prevent form submission
-                                onClick={handleCancel}
-                                style={{
-                                    backgroundColor: '#ccc',
-                                    color: 'white',
-                                    padding: '10px 15px',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                Cancel
-                            </button>
+                                <button
+                                    type="button"
+                                    onClick={handleCancel}
+                                    style={{
+                                        backgroundColor: '#f0f0f0',
+                                        color: '#333',
+                                        padding: '10px 15px',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        fontSize: '16px',
+                                        transition: 'background-color 0.3s'
+                                    }}
+                                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e0e0e0'}
+                                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#f0f0f0'}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -179,7 +288,7 @@ const Footer = () => {
                     zIndex: 1000,
                     textAlign: 'center',
                     maxWidth: '450px',
-                    width: '100%',
+                    width: '70%',
                 }}>
                     <h1 style={{
                         margin: '0 0 15px',
@@ -217,7 +326,6 @@ const Footer = () => {
                     </button>
                 </div>
             )}
-
         </footer>
     );
 };

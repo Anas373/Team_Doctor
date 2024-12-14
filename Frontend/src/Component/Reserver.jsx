@@ -1,170 +1,120 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Import Link from rea
-import { doctors } from './infomedcin'; // Ensure the import is correct
-import { FaPhoneAlt } from 'react-icons/fa'; // Importing phone icon from react-icons
+import { useParams, useNavigate } from 'react-router-dom';
+import { doctors } from './infomedcin'; // Vérifiez que le chemin d'importation est correct
+import { FaPhoneAlt, FaCalendarAlt, FaTimes, FaCheck } from 'react-icons/fa';
 
 const Reservation = () => {
-  const { id } = useParams(); // Access the dynamic 'id' parameter from the URL
-  const navigate = useNavigate(); // Initialize navigate
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [rating, setRating] = useState(0); // State to track the rating
+  const [rating, setRating] = useState(0);
 
-  // Fetch the selected doctor based on the id parameter
+  // Récupération du médecin en fonction de l'ID
   useEffect(() => {
-    const doctor = doctors.find((doc) => doc.id === parseInt(id)); // Find the doctor by id
-    setSelectedDoctor(doctor);
+    const doctor = doctors.find((doc) => doc.id === parseInt(id, 10));
+    setSelectedDoctor(doctor || null); // Protection contre les valeurs nulles
   }, [id]);
 
-  // If doctor is not found, show an error message
   if (!selectedDoctor) {
-    return <div className="text-center text-red-500">Doctor not found</div>;
+    return <div className="text-center text-red-500">Médecin introuvable</div>;
   }
 
-  // Redirect to the sidebar or dashboard (where further actions can happen)
   const handleAccept = () => {
-    // Navigate to the doctor's dashboard or any page after making a reservation
     navigate(`/Dashborde/${selectedDoctor.id}`);
   };
 
-  // Handle rating change
   const handleRating = (newRating) => {
     setRating(newRating);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white">
-      <main className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
-          {/* Section d'information sur le médecin */}
-          <div className="flex flex-col space-y-6 h-full">
-            {/* Image du médecin avec une hauteur fixe mais proportionnelle */}
-            <div className="relative flex-1">
+    <div className="bg-gradient-to-b from-sky-300 to-sky-100 min-h-screen py-12">
+      <main className="container mx-auto px-6 md:px-12">
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Section information médecin */}
+          <div className="space-y-6">
+            <div className="w-44 h-44 rounded-full overflow-hidden mx-auto shadow-2xl transform transition duration-500 hover:scale-110">
               <img
                 src={selectedDoctor.image}
                 alt={selectedDoctor.name}
-                className="rounded-lg shadow-lg transition-all duration-300 transform group-hover:scale-105"
-                style={{
-                  width: '100%',
-                  height: '460px',
-                  objectFit: 'cover',
-                  boxShadow: '4px 4px 12px rgba(0, 0, 0, 0.1)',
-                }}
+                className="w-full h-full object-cover"
               />
             </div>
+            <h2 className="text-3xl font-semibold text-gray-800 text-center">{selectedDoctor.name}</h2>
+            <p className="text-lg text-gray-600 text-center">{selectedDoctor.info}</p>
 
-            {/* Nom du médecin */}
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">
-              Doctor: <span className="text-blue-600">{selectedDoctor.name}</span>
-            </h2>
-
-            {/* Informations sur le médecin */}
-            <h3 className="text-lg font-medium text-gray-700">{selectedDoctor.info}</h3>
-
-            {/* Icône téléphone et numéro */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center justify-center bg-blue-600 text-white rounded-full p-4 shadow-lg">
-                <FaPhoneAlt className="text-white" style={{ width: '20px', height: '20px' }} />
+            <div className="flex items-center justify-center space-x-4 mt-4">
+              <div className="bg-blue-600 text-white p-3 rounded-full shadow-xl transform transition duration-300 hover:scale-110 hover:shadow-2xl">
+                <FaPhoneAlt size={18} />
               </div>
-              <p
-                className="font-medium text-white bg-blue-700 rounded-full px-4 py-2 hover:bg-blue-800 cursor-pointer flex items-center justify-center transition duration-300"
-                style={{ boxShadow: '4px 4px 12px black', width: '250px', height: '50px' }}
-              >
-                {selectedDoctor.telephone}
-              </p>
+              <p className="text-lg text-blue-700 font-medium">{selectedDoctor.telephone}</p>
             </div>
 
-            {/* Carte de localisation */}
-            <iframe
-              src={selectedDoctor.localisation}
-              width="100%"
-              height="300px"
-              style={{ border: 0, boxShadow: '4px 4px 12px rgba(0, 0, 0, 0.1)' }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Map"
-            ></iframe>
+            <div className="rounded-lg overflow-hidden shadow-xl mt-4">
+              <iframe
+                src={selectedDoctor.localisation}
+                width="100%"
+                height="300"
+                className="border-0 rounded-lg"
+                allowFullScreen
+                loading="lazy"
+              ></iframe>
+            </div>
           </div>
 
           {/* Section de réservation */}
-          <div
-            className="w-full max-w-md mx-auto bg-white shadow-lg rounded-lg p-6 flex flex-col"
-            style={{
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', 
-              minHeight: '700px', // Augmentation de la hauteur minimale ici
-            }}
-          >
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">Make a Reservation</h3>
-            <form className="space-y-4 flex-1">
-              {/* Nom du patient */}
-              <div className="space-y-2">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Patient Name
-                </label>
+          <div className="bg-white shadow-xl rounded-lg p-6 w-full max-w-lg mx-auto space-y-6 transform transition duration-500 hover:shadow-2xl">
+            <div className="flex items-center space-x-2 mb-6">
+              <FaCalendarAlt size={24} className="text-blue-600" />
+              <h3 className="text-3xl font-semibold text-gray-800">Rendez-vous</h3>
+            </div>
+
+            <form className="space-y-4">
+              <div>
+                <label htmlFor="name" className="text-sm font-medium text-gray-700">Nom du patient</label>
                 <input
                   id="name"
-                  placeholder="Enter your full name"
+                  type="text"
+                  placeholder="Entrez votre nom complet"
+                  className="w-full px-4 py-3 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                   required
-                  className="w-full px-3 py-3 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                  style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
                 />
               </div>
 
-              {/* Date */}
-              <div className="space-y-2">
-                <label htmlFor="date" className="block text-sm font-medium text-gray-700">
-                  Date
-                </label>
-                <div className="flex">
-                  <input
-                    id="date"
-                    type="date"
-                    required
-                    className="flex-1 px-3 py-3 border rounded-l-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                    style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
-                  />
-                  <button
-                    type="button"
-                    className="px-3 py-2 bg-gray-100 border border-l-0 rounded-r-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300"
-                  >
-                    <span className="sr-only">Select Date</span>
-                  </button>
-                </div>
+              <div>
+                <label htmlFor="date" className="text-sm font-medium text-gray-700">Date</label>
+                <input
+                  id="date"
+                  type="date"
+                  className="w-full px-4 py-3 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                  required
+                />
               </div>
 
-              {/* Heure */}
-              <div className="space-y-2">
-                <label htmlFor="time" className="block text-sm font-medium text-gray-700">
-                  Time
-                </label>
+              <div>
+                <label htmlFor="time" className="text-sm font-medium text-gray-700">Heure</label>
                 <input
                   id="time"
                   type="time"
+                  className="w-full px-4 py-3 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                   required
-                  className="w-full px-3 py-3 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                  style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
                 />
               </div>
 
-              {/* Type de consultation */}
-              <div className="space-y-2">
-                <label htmlFor="consultationType" className="block text-sm font-medium text-gray-700">
-                  Consultation Type
-                </label>
+              <div>
+                <label htmlFor="consultationType" className="text-sm font-medium text-gray-700">Type de consultation</label>
                 <select
                   id="consultationType"
-                  className="w-full px-3 py-3 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                  className="w-full px-4 py-3 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                   required
-                  style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
                 >
                   <option value="visitor">Visiteur</option>
                   <option value="waitingList">Liste d'attente</option>
                 </select>
               </div>
 
-              {/* Star Rating Section */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Rating</label>
+              <div>
+                <label className="text-sm font-medium text-gray-700">Évaluation</label>
                 <div className="flex space-x-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <svg
@@ -177,41 +127,53 @@ const Reservation = () => {
                       height="24"
                       className="cursor-pointer"
                     >
-                      <path
-                        d="M10 15.27L16.18 19l-1.64-7.03L19 8.24l-7.19-.61L10 2 8.19 7.63 1 8.24l5.46 3.73L3.82 19z"
-                      />
+                      <path d="M10 15.27L16.18 19l-1.64-7.03L19 8.24l-7.19-.61L10 2 8.19 7.63 1 8.24l5.46 3.73L3.82 19z" />
                     </svg>
                   ))}
                 </div>
               </div>
 
-              {/* Buttons */}
               <div className="flex space-x-4">
                 <button
                   type="button"
                   onClick={handleAccept}
-                  className="w-full bg-blue-600 text-white px-4 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
-                  style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
-                >
-                  Accept
+                  className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring transform transition duration-300"
+                >No doctors found.
+                  Accepter
                 </button>
                 <button
                   type="button"
                   onClick={() => {
-                    const confirmCancel = window.confirm(
-                      "Are you sure you want to cancel the reservation?"
-                    );
+                    const confirmCancel = window.confirm("Êtes-vous sûr de vouloir annuler la réservation ?");
                     if (confirmCancel) {
-                      alert("You have canceled the reservation.");
-                      navigate("/"); // Redirect to home or another page if needed
+                      alert("Réservation annulée");
+                      navigate("/");
                     }
                   }}
-                  className="w-full bg-red-600 text-white px-4 py-3 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300"
+                  className="w-full bg-red-600 text-white py-3 rounded-md hover:bg-red-700 focus:outline-none focus:ring transform transition duration-300"
                 >
-                  Cancel
+                  Annuler
                 </button>
               </div>
             </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">Avant de prendre un rendez-vous, veuillez vérifier les disponibilités :</p>
+              <div className="flex justify-center space-x-6 mt-4">
+                <div className="flex items-center space-x-2">
+                  <FaTimes className="text-red-600" />
+                  <span className="text-gray-700">Dimanche (Fermé)</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <FaTimes className="text-red-600" />
+                  <span className="text-gray-700">Samedi (Fermé)</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <FaCheck className="text-green-600" />
+                  <span className="text-gray-700">Lundi - Vendredi (Ouvert)</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>

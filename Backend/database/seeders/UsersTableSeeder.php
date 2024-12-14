@@ -15,6 +15,16 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+                    
+                            // Désactiver temporairement les vérifications de clés étrangères
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+            // Truncate la table 'users'
+            DB::table('users')->truncate();
+
+            // Réactiver les vérifications de clés étrangères
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         DB::table('users')->insert([
             [
                 'name' => 'Dr.Mohmed Amine',
@@ -64,5 +74,44 @@ class UsersTableSeeder extends Seeder
                 'role' => 'doctor',
                 'password' => Hash::make('password'),
             ],
+
+
+
+            [
+                'name' => 'Dr. Farid badri',
+                'email' => 'Farid.badri@example.com',
+                'role' => 'doctor',
+                'password' => Hash::make('password'),
+            ],
+            
+
+
+            [
+                'name' => 'Dr. Abdou mohamed said',
+                'email' => 'Abdoumohamed.said@example.com',
+                'role' => 'doctor',
+                'password' => Hash::make('password'),
+            ],
+
+
+
+
+            [
+                'name' => 'Dr. Chachi Abderrazaq',
+                'email' => 'Chachi.Abderrazaq.com',
+                'role' => 'doctor',
+                'password' => Hash::make('password'),
+            ],
+            
+
+
+
+            [
+                'name' => 'Dr. Youness bouziani',
+                'email' => 'Youness.bouziani.com',
+                'role' => 'doctor',
+                'password' => Hash::make('password'),
+            ],
+
         ]);}
 }
